@@ -25,7 +25,11 @@ socketHandler.on('connection', socket => {
 
 const getPrices = () => {
   axios
-    .get(process.env.CRYPTO_LIST_URL as string)
+    .get(process.env.CRYPTO_LIST_URL as string, {
+      headers: {
+        'x-messari-api-key': process.env.API_KEY as string,
+      },
+    })
     .then(response => {
       const pricesList = response.data.data.map((item: IPrice) => {
         return {
@@ -39,11 +43,15 @@ const getPrices = () => {
     })
     .catch(err => {
       console.log(err);
+      socketHandler.emit('crypto', {
+        error: true,
+        message: 'Error Fetching Prices Data From API',
+      });
     });
 };
 
 setInterval(() => {
   getPrices();
-}, 5000);
+}, 20000);
 
 httpServer.listen(process.env.PORT);
