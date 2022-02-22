@@ -1,4 +1,5 @@
 import express from 'express';
+import cryptosRouter from '../routes/cryptos';
 import indexRouter from '../routes';
 
 const app = express();
@@ -9,5 +10,6 @@ app.use(express.urlencoded({ extended: false }));
 
 // Routes...
 app.use('/', indexRouter);
+app.use('/cryptos/profile/', cryptosRouter);
 
 export { app };
