@@ -8,7 +8,7 @@ import { IPrice } from './types/IPrices';
 dotenv.config();
 
 const httpServer = createServer(app);
-const socketHandler = new Server(httpServer);
+export const socketHandler = new Server(httpServer);
 
 socketHandler.on('connection', socket => {
   socket.on('connect_error', () => {
@@ -25,11 +25,14 @@ socketHandler.on('connection', socket => {
 
 const getPrices = () => {
   axios
-    .get(process.env.CRYPTO_LIST_URL as string, {
-      headers: {
-        'x-messari-api-key': process.env.API_KEY as string,
+    .get(
+      `${process.env.CRYPTO_LIST_URL}?fields=id,slug,symbol,metrics/market_data/price_usd`,
+      {
+        headers: {
+          'x-messari-api-key': process.env.API_KEY as string,
+        },
       },
-    })
+    )
     .then(response => {
       const pricesList = response.data.data.map((item: IPrice) => {
         return {
