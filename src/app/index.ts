@@ -11,5 +11,6 @@ app.use(express.urlencoded({ extended: false }));
 // Routes...
 app.use('/', indexRouter);
 app.use('/cryptos/profile/', cryptosRouter);
+app.use('/cryptos/market-data/', cryptosRouter);
 
 export { app };
